@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MCQ Questions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fffde6; /* Set background color */
+        }
+        .card {
+            border: none; /* Remove card border */
+            background-color: #76e6c1; /* Set card background color */
+            color: #070404; /* Set text color to white for better contrast */
+        }
+        .correct {
+            background-color: #c8e6c9; /* Green background for correct answer */
+        }
+        .wrong {
+            background-color: #ffccbc; /* Red background for wrong answer */
+        }
+        .btn-primary {
+            background-color: #ff0066; /* Primary button color */
+            border-color: #ff0066; /* Button border color */
+            color: #fff; /* Button text color */
+        }
+        .btn-primary:hover {
+            background-color: #ff0066; /* Button hover color */
+            border-color: #ff0066; /* Button border hover color */
+        }
+        .feedback {
+            color: #ff0066; /* Feedback text color */
+        }
+    </style>
+    <script>
+        function submitAllAnswers() {
+            const submissions = [];
+            const questions = document.querySelectorAll('.card');
+
+            questions.forEach(question => {
+                const questionId = question.querySelector('.card-title').textContent.split(' ')[0]; // Assuming question ID is in the title
+                const selectedOption = question.querySelector('input[type="radio"]:checked');
+
+                if (selectedOption) {
+                    submissions.push({
+                        questionId: questionId,
+                        selectedAnswer: selectedOption.value
+                    });
+                }
+            });
+
+            // AJAX request to submit the answers
+            fetch('/api/submitAllAnswers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(submissions)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    const feedbackDiv = document.getElementById('feedback');
+                    feedbackDiv.innerText = 'Score: ' + result.score + '/' + result.totalQuestions;
+
+                    // Show feedback for each question
+                    Object.keys(result.feedback).forEach(key => {
+                        feedbackDiv.innerText += `\nQuestion ID ${key}: ${result.feedback[key]}`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const feedbackDiv = document.getElementById('feedback');
+                    feedbackDiv.innerText = 'Error checking answers.';
+                });
+        }
+    </script>
+</head>
+<body>
+<!-- Navbar Section -->
+<div th:replace="~{navbar :: navbar}"></div>
+<div class="container">
+    <h1 class="mt-5">MCQ Questions</h1>
+    <div class="mt-4">
+        <h3>Answer the questions below:</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-deck">
+                    <!-- Iterate through each question dynamically -->
+                    <div th:each="question : ${questions}" class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${question.id} + ' - ' + ${question.questionText}"></h5>
+                            <!-- Options -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:id="'optionA_' + ${question.id}"
+                                       th:name="'question_' + ${question.id}" th:value="${question.optionA}">
+                                <label class="form-check-label" th:for="'optionA_' + ${question.id}" th:text="${question.optionA}"></label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:id="'optionB_' + ${question.id}"
+                                       th:name="'question_' + ${question.id}" th:value="${question.optionB}">
+                                <label class="form-check-label" th:for="'optionB_' + ${question.id}" th:text="${question.optionB}"></label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:id="'optionC_' + ${question.id}"
+                                       th:name="'question_' + ${question.id}" th:value="${question.optionC}">
+                                <label class="form-check-label" th:for="'optionC_' + ${question.id}" th:text="${question.optionC}"></label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:id="'optionD_' + ${question.id}"
+                                       th:name="'question_' + ${question.id}" th:value="${question.optionD}">
+                                <label class="form-check-label" th:for="'optionD_' + ${question.id}" th:text="${question.optionD}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <button class="btn btn-primary mt-3" onclick="submitAllAnswers()">Submit All</button>
+                <!-- Feedback Message -->
+                <div id="feedback" class="feedback mt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

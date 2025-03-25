@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fffde6; /* Background color */
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ff0066; /* Bright pink for the navbar */
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-family: 'Cursive', sans-serif;
+            color: white; /* White for the logo text */
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .navbar .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .navbar .buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #fff; /* White buttons */
+            border: 2px solid white;
+            color: #ff0066; /* Bright pink text for buttons */
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar .buttons a:hover {
+            background-color: white;
+            color: #ff0066;
+            border-color: #ff0066; /* Hover effect */
+        }
+
+        .container {
+            background-color: #c2f4e3; /* Light background for the form */
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            margin-top: 100px;
+        }
+        h2 {
+            color: #ff0066; /* Heading color */
+            text-align: center;
+        }
+        .form-group label {
+            color:  #ff0066; /* Label color */
+        }
+        .form-control {
+            border: 2px solid #76e6c1; /* Input border color */
+        }
+        .btn-primary {
+            background-color: #ffdaea; /* Button color */
+            border-color: #ff0066; /* Button border color */
+            color: #ff0066; /* Button text color */
+        }
+        .btn-primary:hover {
+            background-color: #ff0066; /* Button hover background */
+            color: #fff; /* Button hover text color */
+        }
+        p {
+            text-align: center;
+        }
+        p a {
+            color: #ff0066; /* Link color */
+            text-decoration: none;
+        }
+        p a:hover {
+            color: #ffdaea; /* Link hover color */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Section -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+
+
+<div class="container">
+    <h2 class="mt-5">Login</h2>
+    <form th:action="@{/loginuser}" method="post" th:object="${user}">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="mt-3">Don't have an account? <a th:href="@{/register}">Register here</a></p>
+</div>
+
+</body>
+</html>

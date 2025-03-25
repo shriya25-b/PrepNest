@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Questions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Questions</h1>
+    <form action="#" th:action="@{/submitAnswers}" method="post">
+        <div class="list-group">
+            <!-- Loop through the questions and display them -->
+            <div th:each="question : ${questions}">
+                <div class="list-group-item">
+                    <h5 th:text="${question.text}">Question Text</h5>
+                    <div>
+                        <input type="text" th:name="'question_' + ${question.id}" class="form-control" placeholder="Your answer here" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Submit Answers</button>
+        </div>
+    </form>
+
+    <!-- Display results if available -->
+    <div th:if="${results}" class="mt-5">
+        <h2>Results</h2>
+        <ul class="list-group">
+            <li th:each="entry : ${#lists.sort(#maps.entries(results), (a, b) -> a.key <=> b.key)}"
+                th:class="${entry.value} ? 'list-group-item list-group-item-success' : 'list-group-item list-group-item-danger'">
+                <span th:text="'Question ID ' + ${entry.key} + ': ' + (entry.value ? 'Correct' : 'Incorrect')"></span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

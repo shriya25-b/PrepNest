@@ -1,0 +1,59 @@
+<!-- navbar.html -->
+<div th:fragment="navbar">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ff0066;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-family: 'Cursive', sans-serif;
+            color: white;
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .navbar .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .navbar .buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 2px solid white;
+            color: #ff0066;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar .buttons a:hover {
+            background-color: white;
+            color: #ff0066;
+            border-color: #ff0066;
+        }
+    </style>
+
+    <div class="navbar">
+        <a th:href="@{/}" href="#"> <!-- Link to the index page -->
+            <h1>PrepNest</h1>
+        </a>
+
+        <div class="buttons">
+            <!-- Show Login/Signup buttons if user is not authenticated (no userId in session) -->
+            <a th:if="${session.userId == null}" th:href="@{/login}" href="#">Login</a>
+            <a th:if="${session.userId == null}" th:href="@{/register}" href="#">Signup</a>
+
+            <!-- Show Logout button if user is authenticated (userId exists in session) -->
+            <a th:if="${session.userId != null}" th:href="@{/logout}" href="#">Logout</a>
+        </div>
+    </div>
+</div>
