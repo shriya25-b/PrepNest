@@ -40,18 +40,21 @@ public class UserController {
     // Handle login
     @PostMapping("/loginuser")
     public String loginUser(@ModelAttribute("user") User user, Model model, HttpSession session) {
+
+        System.out.println("Finding user with username: " + user.getUsername());
+
         User existingUser = userRepository.findByUsername(user.getUsername());
+        System.out.println("User found: " + existingUser);
 
         if (existingUser != null && user.getPassword().equals(existingUser.getPassword())) {
-            // If login is successful, store userId in session
             session.setAttribute("userId", existingUser.getId());
-            return "redirect:/home"; // Redirect to home after successful login
+            return "redirect:/home";
         } else {
-            // If login fails, return to login page with an error
             model.addAttribute("error", "Invalid username or password");
             return "login";
         }
     }
+
 
     // Handle registration
     @PostMapping("/registeruser")

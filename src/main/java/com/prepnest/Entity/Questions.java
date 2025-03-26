@@ -18,4 +18,7 @@ public class Questions {
     private String optionD;
     private String correctAnswer;
 
+    public String getText() {
+        return questionText;
+    }
 }
